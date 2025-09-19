@@ -6,67 +6,213 @@
   <title>English Test for Kids</title>
   <style>
     body {
+      background-color: #fefae0;
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      background-color: #FFFCEB;
       padding: 20px;
-      max-width: 900px;
+    }
+    .container {
+      max-width: 700px;
       margin: auto;
-      border-radius: 10px;
+      background: #fff3c7;
+      padding: 20px;
+      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
       text-align: center;
+      color: #d2691e;
     }
-    h1 {
-      color: #FF6F61;
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
     }
-    #intro {
+    input[type="text"], input[type="email"], input[type="tel"], textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .question {
       margin-bottom: 20px;
     }
-    #startBtn {
-      background: #00C292;
+    .options label {
+      font-weight: normal;
+      display: block;
+    }
+    button {
+      background-color: #ffa500;
       color: white;
+      padding: 10px 20px;
       border: none;
-      padding: 12px 24px;
+      border-radius: 5px;
       font-size: 18px;
-      border-radius: 10px;
       cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #ff8c00;
+    }
+    .hidden {
+      display: none;
     }
     #timer {
+      text-align: right;
       font-weight: bold;
-      color: #E74C3C;
-      margin-top: 10px;
+      color: red;
     }
   </style>
 </head>
 <body>
-  <h1>✨ English Test for Kids ✨</h1>
-  <div id="intro">
-    <p>Bem-vindo ao teste de inglês!</p>
-    <p>Quando você clicar no botão abaixo, o teste abrirá em uma nova aba e o cronômetro iniciará nesta página.</p>
-    <button id="startBtn" onclick="startTest()">⭐ Iniciar Teste ⭐</button>
-    <div id="timer">Tempo restante: 30:00</div>
+  <div class="container">
+    <h1>English Test for Kids</h1>
+
+    <!-- Intro Form -->
+    <div id="introForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" name="phone" required />
+
+      <label for="date">Date:</label>
+      <input type="text" id="date" name="date" placeholder="DD/MM/YYYY" required />
+
+      <p><strong>Click to start the test. You have 30 minutes.</strong></p>
+      <button onclick="startTest()">Start Test</button>
+    </div>
+
+    <!-- Test Form -->
+    <form id="englishTest" class="hidden">
+      <div id="timer">Time Left: 30:00</div>
+
+      <!-- Questions -->
+      <div class="question">
+        <label for="q1">1. What is your name?</label>
+        <textarea name="q1" id="q1" required></textarea>
+      </div>
+
+      <div class="question">
+        <label>2. What color is the sky?</label>
+        <div class="options">
+          <label><input type="radio" name="q2" value="a"> a) Blue</label>
+          <label><input type="radio" name="q2" value="b"> b) Red</label>
+          <label><input type="radio" name="q2" value="c"> c) Green</label>
+          <label><input type="radio" name="q2" value="d"> d) Yellow</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label for="q3">3. Where do you live?</label>
+        <textarea name="q3" id="q3" required></textarea>
+      </div>
+
+      <div class="question">
+        <label>4. Choose the correct animal: 🐶</label>
+        <div class="options">
+          <label><input type="radio" name="q4" value="a"> a) Cat</label>
+          <label><input type="radio" name="q4" value="b"> b) Dog</label>
+          <label><input type="radio" name="q4" value="c"> c) Bird</label>
+          <label><input type="radio" name="q4" value="d"> d) Fish</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label for="q5">5. Tell us about your favorite toy.</label>
+        <textarea name="q5" id="q5" required></textarea>
+      </div>
+
+      <div class="question">
+        <label>6. What is 2 + 2?</label>
+        <div class="options">
+          <label><input type="radio" name="q6" value="a"> a) 3</label>
+          <label><input type="radio" name="q6" value="b"> b) 4</label>
+          <label><input type="radio" name="q6" value="c"> c) 5</label>
+          <label><input type="radio" name="q6" value="d"> d) 6</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>7. What is the opposite of "cold"?</label>
+        <div class="options">
+          <label><input type="radio" name="q7" value="a"> a) Hot</label>
+          <label><input type="radio" name="q7" value="b"> b) Wet</label>
+          <label><input type="radio" name="q7" value="c"> c) Ice</label>
+          <label><input type="radio" name="q7" value="d"> d) Dry</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>8. What is the first letter of the alphabet?</label>
+        <div class="options">
+          <label><input type="radio" name="q8" value="a"> a) A</label>
+          <label><input type="radio" name="q8" value="b"> b) Z</label>
+          <label><input type="radio" name="q8" value="c"> c) B</label>
+          <label><input type="radio" name="q8" value="d"> d) Y</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>9. What color is a banana?</label>
+        <div class="options">
+          <label><input type="radio" name="q9" value="a"> a) Yellow</label>
+          <label><input type="radio" name="q9" value="b"> b) Blue</label>
+          <label><input type="radio" name="q9" value="c"> c) Green</label>
+          <label><input type="radio" name="q9" value="d"> d) Red</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label for="q10">10. Write a sentence using the word "happy".</label>
+        <textarea name="q10" id="q10" required></textarea>
+      </div>
+
+      <button type="button" onclick="saveTest()">💾 Save</button>
+      <button type="submit">📩 Send to Dani</button>
+    </form>
   </div>
 
   <script>
+    let timerInterval;
     function startTest() {
-      window.open("https://docs.google.com/forms/d/e/1FAIpQLSccT-nMv5FTTS1XiOjv0SMo-NLGnDF5Sbup0SApM-4XVNO2RA/viewform", '_blank');
-      document.getElementById('startBtn').style.display = 'none';
-      startTimer(30 * 60);
+      document.getElementById('introForm').classList.add('hidden');
+      document.getElementById('englishTest').classList.remove('hidden');
+      startTimer(30 * 60); // 30 minutes
     }
 
-    function startTimer(seconds) {
-      let remaining = seconds;
-      const timerDisplay = document.getElementById('timer');
-      const interval = setInterval(() => {
-        const minutes = Math.floor(remaining / 60);
-        const secs = remaining % 60;
-        timerDisplay.textContent = `Tempo restante: ${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        remaining--;
-        if (remaining < 0) {
-          clearInterval(interval);
-          timerDisplay.textContent = 'Tempo encerrado!';
+    function startTimer(duration) {
+      let timer = duration, minutes, seconds;
+      timerInterval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        document.getElementById('timer').textContent = `Time Left: ${minutes}:${seconds}`;
+
+        if (--timer < 0) {
+          clearInterval(timerInterval);
+          alert("Time is up! Submitting your test now.");
+          document.getElementById("englishTest").submit();
         }
       }, 1000);
     }
+
+    function saveTest() {
+      alert("Respostas salvas localmente. (Essa função pode ser expandida para salvar no navegador ou baixar um arquivo.)");
+    }
+
+    document.getElementById("englishTest").addEventListener("submit", function(event) {
+      event.preventDefault();
+      clearInterval(timerInterval);
+      alert("Thank you! Your test has been submitted successfully.");
+      // Future: Send to Google Sheets via Apps Script
+    });
   </script>
 </body>
 </html>
