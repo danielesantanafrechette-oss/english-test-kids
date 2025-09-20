@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>English Test for Kids • Danny Testes</title>
+  <style>
+    body{font-family:"Comic Sans MS",sans-serif;background:#FFFCEB;margin:0;padding:0;}
+    .container{max-width:900px;margin:auto;padding:20px;}
+    h1{text-align:center;color:#FF6F61;}
+    .hidden{display:none!important}
+    .question{margin:20px 0;padding:15px;background:#fff9f3;border-radius:12px;}
+    label{display:block;margin:5px 0}
+    input,textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:8px}
+    .btn{padding:10px 20px;margin:5px;border:none;border-radius:8px;cursor:pointer;}
+    .btn-primary{background:#00C292;color:#fff}
+    .btn-secondary{background:#FF6F61;color:#fff}
+    #results{margin-top:20px;padding:15px;background:#f0f9ff;border-radius:12px}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>English Test for Kids 🎨✨</h1>
+  <div id="intro">
+    <h2>Student Info</h2>
+    <label>Name <input id="name"></label>
+    <label>Email <input id="email" type="email"></label>
+    <label>Phone <input id="phone"></label>
+    <label>Date <input id="date" type="date"></label>
+    <p><i>Click Start Test to begin. You have 30 minutes.</i></p>
+    <button class="btn btn-primary" onclick="startTest()">Start Test 🚀</button>
+  </div>
+
+  <div id="exam" class="hidden">
+    <div id="timer">⏰ 30:00</div>
+    <div id="questions"></div>
+    <div>
+      <button class="btn btn-secondary" onclick="prevQuestion()">Previous</button>
+      <button class="btn btn-secondary" onclick="nextQuestion()">Next</button>
+      <button class="btn btn-primary" onclick="saveAnswers()">Save</button>
+      <button class="btn btn-primary" onclick="sendToDanny()">Send to Danny</button>
+      <button class="btn btn-secondary" onclick="downloadCSV()">Download CSV</button>
+    </div>
+  </div>
+
+  <div id="results" class="hidden"></div>
+</div>
+
+<script>
+const ANSWER_KEY={q2:"b",q4:"a",q6:"a",q7:"a",q8:"a",q9:"a"};
+const EMAIL_WEBHOOK="https://script.google.com/macros/s/AKfycbzethr6pDaAQIl4w4PURXQhCWPR-DtwcjnrnEvhkjnBgPdFzv7D3YCS6mxG1TTB52hS/exec";
+let current=1,answers={},timerInterval,timeLeft=30*60;
+
+const questions=[
+ {id:"q1",type:"text",text:"Write a sentence with the word 'happy'"},
+ {id:"q2",type:"mc",text:"What color is the sky?",options:["Red","Blue","Green","Yellow"]},
+ {id:"q3",type:"text",text:"Write your favorite animal"},
+ {id:"q4",type:"mc",text:"What do you wear on your feet?",options:["Shoes","Hat","Gloves","Shirt"]},
+ {id:"q5",type:"text",text:"Write a word that rhymes with 'cat'"},
+ {id:"q6",type:"mc",text:"What animal barks?",options:["Dog","Cat","Fish","Bird"]},
+ {id:"q7",type:"mc",text:"What do we use to see?",options:["Eyes","Nose","Mouth","Hands"]},
+ {id:"q8",type:"mc",text:"What is hot and bright?",options:["Sun","Moon","Tree","Book"]},
+ {id:"q9",type:"mc",text:"Which one is a fruit?",options:["Apple","Car","Chair","Stone"]},
+ {id:"q10",type:"text",text:"Write a sentence using the word 'school'"}
+];
+
+function startTest(){
+ document.getElementById("intro").classList.add("hidden");
+ document.getElementById("exam").classList.remove("hidden");
+ showQuestion();
+ timerInterval=setInterval(updateTimer,1000);
+}
+function updateTimer(){timeLeft--;if(timeLeft<=0){clearInterval(timerInterval);sendToDanny();}let m=Math.floor(timeLeft/60),s=timeLeft%60;document.getElementById("timer").innerText=`⏰ ${m}:${s.toString().padStart(2,'0')}`;}
+function showQuestion(){let q=questions[current-1];let container=document.getElementById("questions");container.innerHTML="";let div=document.createElement("div");div.className="question";div.innerHTML=`<div><b>${current}/10</b> - ${q.text}</div>`;
+ if(q.type=="mc") q.options.forEach((opt,i)=>{div.innerHTML+=`<label><input type='radio' name='${q.id}' value='${String.fromCharCode(97+i)}' ${answers[q.id]==String.fromCharCode(97+i)?'checked':''}> ${opt}</label>`});
+ else div.innerHTML+=`<textarea id='${q.id}'>${answers[q.id]||""}</textarea>`;
+ container.appendChild(div);}
+function prevQuestion(){if(current>1){saveCurrent();current--;showQuestion();}}
+function nextQuestion(){if(current<questions.length){saveCurrent();current++;showQuestion();}}
+function saveCurrent(){let q=questions[current-1];if(q.type=="mc"){let sel=document.querySelector(`input[name='${q.id}']:checked`);if(sel)answers[q.id]=sel.value;}else answers[q.id]=document.getElementById(q.id).value;}
+function saveAnswers(){saveCurrent();localStorage.setItem("answers",JSON.stringify(answers));alert("Respostas salvas localmente.");}
+
+function sendToDanny(){saveCurrent();clearInterval(timerInterval);
+ let name=document.getElementById("name").value,email=document.getElementById("email").value,phone=document.getElementById("phone").value,date=document.getElementById("date").value;
+ let score=0,resultHTML="<h2>Results</h2><ul>";
+ questions.forEach(q=>{if(q.type=="mc"){if(answers[q.id]==ANSWER_KEY[q.id]){score+=1;resultHTML+=`<li>${q.text}: ✅ Correct</li>`;}else{resultHTML+=`<li>${q.text}: ❌ Wrong (Correct: ${ANSWER_KEY[q.id]})</li>`;}}
+ else{let pts=0;if(answers[q.id]&&answers[q.id].trim()!=""){pts=1;score+=1;resultHTML+=`<li>${q.text}: ✅ (${answers[q.id]})</li>`;}else{resultHTML+=`<li>${q.text}: ❌ (empty)</li>`;}
+ if(pts<1)resultHTML+=`<div class='suggestion'>Suggested answer: Example for ${q.id}</div>`;}});
+ resultHTML+=`</ul><b>Final Score: ${score}/10</b>`;
+ document.getElementById("results").innerHTML=resultHTML;document.getElementById("results").classList.remove("hidden");
+ const payload={data:{name,email,phone,date,...answers,final_score:score}};
+ fetch(EMAIL_WEBHOOK,{method:"POST",body:JSON.stringify(payload),headers:{"Content-Type":"application/json"}});
+}
+
+function downloadCSV(){saveCurrent();let csv="Name,Email,Phone,Date,"+questions.map(q=>q.id).join(",")+",Final Score\n";let name=document.getElementById("name").value,email=document.getElementById("email").value,phone=document.getElementById("phone").value,date=document.getElementById("date").value;let row=[name,email,phone,date,...questions.map(q=>`"${answers[q.id]||""}"`),Object.values(answers).length].join(",");csv+=row;let blob=new Blob([csv],{type:"text/csv"});let url=URL.createObjectURL(blob);let a=document.createElement("a");a.href=url;a.download="results.csv";a.click();}
+</script>
+</body>
+</html>
