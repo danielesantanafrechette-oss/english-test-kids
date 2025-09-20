@@ -5,317 +5,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>English Test for Kids • Danny Testes</title>
   <style>
-    :root{
-      --bg:#FFFCEB;--accent:#FF6F61;--teal:#00C292;--teal-dark:#009977;--ink:#333;--card:#fff;--muted:#666;--warning:#d93025
-    }
-    html,body{height:100%}
-    body{font-family:"Comic Sans MS", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background:var(--bg); color:var(--ink); margin:0}
-    .container{max-width:980px;margin:0 auto;padding:24px}
-    .card{background:var(--card);border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:24px}
-    h1{color:var(--accent);margin:.2rem 0 1rem;text-align:center}
-    h2{color:var(--accent);margin:0 0 .75rem}
-    .row{display:grid;gap:12px}
-    @media(min-width:640px){.row{grid-template-columns:repeat(2,1fr)}}
-    label{font-weight:600;display:block;margin:.25rem 0}
-    input,textarea,select{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:12px;border:1px solid #ddd;font-size:16px}
-    textarea{min-height:90px;resize:vertical}
-    .btn{appearance:none;border:0;border-radius:16px;padding:12px 18px;background:var(--teal);color:#fff;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#e9eef3;color:#0b2b40}
-    .btn:hover{background:var(--teal-dark)}
-    .toolbar{display:flex;gap:10px;flex-wrap:wrap}
-    .hidden{display:none}
-    .meta{display:flex;justify-content:space-between;align-items:center;gap:12px}
-    #timer{font-weight:800;color:var(--warning);font-size:18px}
-    .low-time{animation:pulse 1s infinite}
-    @keyframes pulse{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
-    .question{margin:14px 0}
-    .q-title{font-weight:700;margin-bottom:6px}
-    .nav{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-    .pill{display:inline-block;background:#f7f7f7;border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
-    .result{background:#f0f9ff;border:1px solid #cfe8ff;border-radius:12px;padding:16px}
-    table{border-collapse:collapse;width:100%}
-    th,td{border:1px solid #ddd;padding:8px}
-    th{background:#fafafa;text-align:left}
-    .alert{background:#fff3cd;border:1px solid #ffeeba;color:#856404;border-radius:10px;padding:10px;margin:10px 0}
-    .ok{background:#e8fff3;border:1px solid #bff5d1;color:#1b5e20}
+    body{font-family:"Comic Sans MS",sans-serif;background:#FFFCEB;margin:0;padding:0;}
+    .container{max-width:900px;margin:auto;padding:20px;}
+    h1{text-align:center;color:#FF6F61;}
+    .hidden{display:none!important}
+    .question{margin:20px 0;padding:15px;background:#fff9f3;border-radius:12px;}
+    label{display:block;margin:5px 0}
+    input,textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:8px}
+    .btn{padding:10px 20px;margin:5px;border:none;border-radius:8px;cursor:pointer;}
+    .btn-primary{background:#00C292;color:#fff}
+    .btn-secondary{background:#FF6F61;color:#fff}
+    #results{margin-top:20px;padding:15px;background:#f0f9ff;border-radius:12px}
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card" id="intro">
-      <h1>English Test for Kids</h1>
-      <p style="text-align:center;margin-top:-6px">Friendly, playful and mobile‑ready • by <b>DANNY TESTES</b></p>
-      <h2>Student Info</h2>
-      <div class="row" aria-describedby="formHelp">
-        <div>
-          <label for="name">Name</label>
-          <input id="name" autocomplete="name" required />
-        </div>
-        <div>
-          <label for="email">Email</label>
-          <input id="email" type="email" autocomplete="email" required />
-        </div>
-        <div>
-          <label for="phone">Phone</label>
-          <input id="phone" type="tel" autocomplete="tel" />
-        </div>
-        <div>
-          <label for="date">Date</label>
-          <input id="date" type="date" />
-        </div>
-      </div>
-      <p id="formHelp" class="pill" style="margin-top:8px">Click <b>Start Test</b> to begin. You have <b>30 minutes</b>.</p>
-      <div class="toolbar" style="justify-content:center;margin-top:10px">
-        <button class="btn" onclick="startTest()">Start Test</button>
-      </div>
-    </div>
+<div class="container">
+  <h1>English Test for Kids 🎨✨</h1>
+  <div id="intro">
+    <h2>Student Info</h2>
+    <label>Name <input id="name"></label>
+    <label>Email <input id="email" type="email"></label>
+    <label>Phone <input id="phone"></label>
+    <label>Date <input id="date" type="date"></label>
+    <p><i>Click Start Test to begin. You have 30 minutes.</i></p>
+    <button class="btn btn-primary" onclick="startTest()">Start Test 🚀</button>
+  </div>
 
-    <div class="card hidden" id="exam">
-      <div class="meta">
-        <div class="pill" id="progressPill">Question <span id="pageNow">1</span>/10</div>
-        <div id="timer">30:00</div>
-      </div>
-
-      <!-- Question pages -->
-      <form id="testForm" novalidate>
-        <!-- Q1 Discursive -->
-        <section class="question" data-q="1">
-          <div class="q-title">Q1 (writing). Write a sentence with the word <b>"rain"</b>.</div>
-          <textarea id="q1" aria-label="Q1 answer"></textarea>
-        </section>
-
-        <!-- Q2 MCQ -->
-        <section class="question hidden" data-q="2">
-          <div class="q-title">Q2. What do we drink in the morning?</div>
-          <label><input type="radio" name="q2" value="a"> a) Bread</label>
-          <label><input type="radio" name="q2" value="b"> b) Juice</label>
-          <label><input type="radio" name="q2" value="c"> c) Chair</label>
-          <label><input type="radio" name="q2" value="d"> d) Window</label>
-        </section>
-
-        <!-- Q3 Discursive -->
-        <section class="question hidden" data-q="3">
-          <div class="q-title">Q3 (writing). Write the name of a place you like to visit.</div>
-          <textarea id="q3" aria-label="Q3 answer"></textarea>
-        </section>
-
-        <!-- Q4 MCQ -->
-        <section class="question hidden" data-q="4">
-          <div class="q-title">Q4. What do we use to cut paper?</div>
-          <label><input type="radio" name="q4" value="a"> a) Scissors</label>
-          <label><input type="radio" name="q4" value="b"> b) Spoon</label>
-          <label><input type="radio" name="q4" value="c"> c) Plate</label>
-          <label><input type="radio" name="q4" value="d"> d) Straw</label>
-        </section>
-
-        <!-- Q5 Discursive -->
-        <section class="question hidden" data-q="5">
-          <div class="q-title">Q5 (writing). Write a word that rhymes with <b>"ball"</b>.</div>
-          <textarea id="q5" aria-label="Q5 answer"></textarea>
-        </section>
-
-        <!-- Q6 MCQ -->
-        <section class="question hidden" data-q="6">
-          <div class="q-title">Q6. Which one is a pet?</div>
-          <label><input type="radio" name="q6" value="a"> a) Dog</label>
-          <label><input type="radio" name="q6" value="b"> b) Car</label>
-          <label><input type="radio" name="q6" value="c"> c) Tree</label>
-          <label><input type="radio" name="q6" value="d"> d) Cloud</label>
-        </section>
-
-        <!-- Q7 MCQ -->
-        <section class="question hidden" data-q="7">
-          <div class="q-title">Q7. What do we wear on our feet?</div>
-          <label><input type="radio" name="q7" value="a"> a) Shoes</label>
-          <label><input type="radio" name="q7" value="b"> b) Hat</label>
-          <label><input type="radio" name="q7" value="c"> c) Gloves</label>
-          <label><input type="radio" name="q7" value="d"> d) Ring</label>
-        </section>
-
-        <!-- Q8 MCQ -->
-        <section class="question hidden" data-q="8">
-          <div class="q-title">Q8. Which one is hot and bright?</div>
-          <label><input type="radio" name="q8" value="a"> a) Sun</label>
-          <label><input type="radio" name="q8" value="b"> b) Ice</label>
-          <label><input type="radio" name="q8" value="c"> c) Pillow</label>
-          <label><input type="radio" name="q8" value="d"> d) Book</label>
-        </section>
-
-        <!-- Q9 MCQ -->
-        <section class="question hidden" data-q="9">
-          <div class="q-title">Q9. Which one is a fruit?</div>
-          <label><input type="radio" name="q9" value="a"> a) Apple</label>
-          <label><input type="radio" name="q9" value="b"> b) Onion</label>
-          <label><input type="radio" name="q9" value="c"> c) Bread</label>
-          <label><input type="radio" name="q9" value="d"> d) Cheese</label>
-        </section>
-
-        <!-- Q10 Discursive -->
-        <section class="question hidden" data-q="10">
-          <div class="q-title">Q10 (writing). Write a sentence using the word <b>"school"</b>.</div>
-          <textarea id="q10" aria-label="Q10 answer"></textarea>
-        </section>
-      </form>
-
-      <div class="nav">
-        <button class="btn secondary" onclick="prevPage()" id="prevBtn" aria-label="Previous question">◀ Previous</button>
-        <div class="toolbar">
-          <button class="btn secondary" onclick="saveAnswers()">💾 Save</button>
-          <button class="btn" onclick="sendToDanny()">📩 Send to Danny</button>
-          <button class="btn secondary" onclick="downloadCSV()">⬇ Download CSV</button>
-          <button class="btn" onclick="nextPage()" id="nextBtn" aria-label="Next question">Next ▶</button>
-        </div>
-      </div>
-
-      <div class="alert hidden" id="fiveMinWarn">⏰ Less than 5 minutes remaining. Please review your answers.</div>
-    </div>
-
-    <div class="card hidden" id="resultsCard">
-      <h2>Results</h2>
-      <div class="result" id="resultsBox"></div>
-      <details style="margin-top:10px">
-        <summary><b>Rubrica (Discursivas)</b></summary>
-        <table style="margin-top:8px">
-          <tr><th>Critério</th><th>Descrição</th><th>Pontuação</th></tr>
-          <tr><td>✅ Correto</td><td>Aluno compreendeu a pergunta e escreveu de forma correta (gramática e sentido)</td><td><b>1.0</b></td></tr>
-          <tr><td>⚠️ Parcial</td><td>Aluno compreendeu a pergunta, mas com erro de escrita ou gramática</td><td><b>0.5</b></td></tr>
-          <tr><td>❌ Incorreto</td><td>Resposta sem sentido, em branco ou não relacionada com a pergunta</td><td><b>0.0</b></td></tr>
-        </table>
-      </details>
+  <div id="exam" class="hidden">
+    <div id="timer">⏰ 30:00</div>
+    <div id="questions"></div>
+    <div>
+      <button class="btn btn-secondary" onclick="prevQuestion()">Previous</button>
+      <button class="btn btn-secondary" onclick="nextQuestion()">Next</button>
+      <button class="btn btn-primary" onclick="saveAnswers()">Save</button>
+      <button class="btn btn-primary" onclick="sendToDanny()">Send to Danny</button>
+      <button class="btn btn-secondary" onclick="downloadCSV()">Download CSV</button>
     </div>
   </div>
 
-  <script>
-    // ====== State ======
-    const ANSWER_KEY = { q2:"b", q4:"a", q6:"a", q7:"a", q8:"a", q9:"a" };
-    let page = 1; // 1..10
-    let timerInterval; let timeLeft = 30*60; // 30 minutes
+  <div id="results" class="hidden"></div>
+</div>
 
-    // ====== UI Helpers ======
-    function show(el){el.classList.remove('hidden')} function hide(el){el.classList.add('hidden')}
-    function qs(s){return document.querySelector(s)}
-    function qsa(s){return Array.from(document.querySelectorAll(s))}
+<script>
+const ANSWER_KEY={q2:"b",q4:"a",q6:"a",q7:"a",q8:"a",q9:"a"};
+const EMAIL_WEBHOOK="https://script.google.com/macros/s/AKfycbzethr6pDaAQIl4w4PURXQhCWPR-DtwcjnrnEvhkjnBgPdFzv7D3YCS6mxG1TTB52hS/exec";
+let current=1,answers={},timerInterval,timeLeft=30*60;
 
-    // ====== Start / Timer ======
-    function startTest(){
-      hide(qs('#intro')); show(qs('#exam')); showPage(1);
-      const saved = JSON.parse(localStorage.getItem('danny_test_kids')||'null');
-      if(saved){fillForm(saved)} else {qs('#date').value ||= new Date().toISOString().slice(0,10)}
-      startTimer();
-    }
-    function startTimer(){
-      updateTimerText();
-      timerInterval = setInterval(()=>{
-        timeLeft--; if(timeLeft<=300){qs('#fiveMinWarn').classList.remove('hidden'); qs('#timer').classList.add('low-time')}
-        if(timeLeft<=0){clearInterval(timerInterval); computeAndShowResults(); return}
-        updateTimerText();
-      },1000)
-    }
-    function updateTimerText(){ const m=Math.floor(timeLeft/60), s=String(timeLeft%60).padStart(2,'0'); qs('#timer').textContent=`${m}:${s}` }
+const questions=[
+ {id:"q1",type:"text",text:"Write a sentence with the word 'happy'"},
+ {id:"q2",type:"mc",text:"What color is the sky?",options:["Red","Blue","Green","Yellow"]},
+ {id:"q3",type:"text",text:"Write your favorite animal"},
+ {id:"q4",type:"mc",text:"What do you wear on your feet?",options:["Shoes","Hat","Gloves","Shirt"]},
+ {id:"q5",type:"text",text:"Write a word that rhymes with 'cat'"},
+ {id:"q6",type:"mc",text:"What animal barks?",options:["Dog","Cat","Fish","Bird"]},
+ {id:"q7",type:"mc",text:"What do we use to see?",options:["Eyes","Nose","Mouth","Hands"]},
+ {id:"q8",type:"mc",text:"What is hot and bright?",options:["Sun","Moon","Tree","Book"]},
+ {id:"q9",type:"mc",text:"Which one is a fruit?",options:["Apple","Car","Chair","Stone"]},
+ {id:"q10",type:"text",text:"Write a sentence using the word 'school'"}
+];
 
-    // ====== Paging ======
-    function showPage(n){
-      page = Math.max(1, Math.min(10, n));
-      qsa('[data-q]').forEach(sec=>{sec.classList.toggle('hidden', Number(sec.dataset.q)!==page)});
-      qs('#pageNow').textContent = String(page);
-      qs('#prevBtn').disabled = page===1; qs('#nextBtn').textContent = page===10? 'Finish ▶' : 'Next ▶';
-    }
-    function nextPage(){ if(page<10){ showPage(page+1) } else { computeAndShowResults() } }
-    function prevPage(){ if(page>1){ showPage(page-1) } }
+function startTest(){
+ document.getElementById("intro").classList.add("hidden");
+ document.getElementById("exam").classList.remove("hidden");
+ showQuestion();
+ timerInterval=setInterval(updateTimer,1000);
+}
+function updateTimer(){timeLeft--;if(timeLeft<=0){clearInterval(timerInterval);sendToDanny();}let m=Math.floor(timeLeft/60),s=timeLeft%60;document.getElementById("timer").innerText=`⏰ ${m}:${s.toString().padStart(2,'0')}`;}
+function showQuestion(){let q=questions[current-1];let container=document.getElementById("questions");container.innerHTML="";let div=document.createElement("div");div.className="question";div.innerHTML=`<div><b>${current}/10</b> - ${q.text}</div>`;
+ if(q.type=="mc") q.options.forEach((opt,i)=>{div.innerHTML+=`<label><input type='radio' name='${q.id}' value='${String.fromCharCode(97+i)}' ${answers[q.id]==String.fromCharCode(97+i)?'checked':''}> ${opt}</label>`});
+ else div.innerHTML+=`<textarea id='${q.id}'>${answers[q.id]||""}</textarea>`;
+ container.appendChild(div);}
+function prevQuestion(){if(current>1){saveCurrent();current--;showQuestion();}}
+function nextQuestion(){if(current<questions.length){saveCurrent();current++;showQuestion();}}
+function saveCurrent(){let q=questions[current-1];if(q.type=="mc"){let sel=document.querySelector(`input[name='${q.id}']:checked`);if(sel)answers[q.id]=sel.value;}else answers[q.id]=document.getElementById(q.id).value;}
+function saveAnswers(){saveCurrent();localStorage.setItem("answers",JSON.stringify(answers));alert("Respostas salvas localmente.");}
 
-    // ====== Persistence ======
-    qsa('input, textarea').forEach(el=> el.addEventListener('change', debounce(saveAnswers, 300)) )
-    function saveAnswers(){ localStorage.setItem('danny_test_kids', JSON.stringify(getPayload(false))); alert('Respostas salvas localmente.') }
-    function fillForm(d){ ['name','email','phone','date','q1','q3','q5','q10'].forEach(k=>{ if(d[k]) qs('#'+k).value=d[k] })
-      ;['q2','q4','q6','q7','q8','q9'].forEach(k=>{ if(d[k]) { const r = qs(`input[name="${k}"][value="${d[k]}"]`); if(r) r.checked=true } }) }
+function sendToDanny(){saveCurrent();clearInterval(timerInterval);
+ let name=document.getElementById("name").value,email=document.getElementById("email").value,phone=document.getElementById("phone").value,date=document.getElementById("date").value;
+ let score=0,resultHTML="<h2>Results</h2><ul>";
+ questions.forEach(q=>{if(q.type=="mc"){if(answers[q.id]==ANSWER_KEY[q.id]){score+=1;resultHTML+=`<li>${q.text}: ✅ Correct</li>`;}else{resultHTML+=`<li>${q.text}: ❌ Wrong (Correct: ${ANSWER_KEY[q.id]})</li>`;}}
+ else{let pts=0;if(answers[q.id]&&answers[q.id].trim()!=""){pts=1;score+=1;resultHTML+=`<li>${q.text}: ✅ (${answers[q.id]})</li>`;}else{resultHTML+=`<li>${q.text}: ❌ (empty)</li>`;}
+ if(pts<1)resultHTML+=`<div class='suggestion'>Suggested answer: Example for ${q.id}</div>`;}});
+ resultHTML+=`</ul><b>Final Score: ${score}/10</b>`;
+ document.getElementById("results").innerHTML=resultHTML;document.getElementById("results").classList.remove("hidden");
+ const payload={data:{name,email,phone,date,...answers,final_score:score}};
+ fetch(EMAIL_WEBHOOK,{method:"POST",body:JSON.stringify(payload),headers:{"Content-Type":"application/json"}});
+}
 
-    // ====== Scoring ======
-    function computeScore(payload){
-      let score = 0;
-      // objective
-      Object.keys(ANSWER_KEY).forEach(k=>{ if(payload[k] === ANSWER_KEY[k]) score += 1 })
-      // discursive heuristic (kids level): length + simple keyword relevance per prompt
-      score += rubricScore(payload.q1, ['rain']);
-      score += rubricScore(payload.q3, []);
-      score += rubricScore(payload.q5, ['ball']);
-      score += rubricScore(payload.q10, ['school']);
-      return score;
-    }
-    function rubricScore(text, must){
-      const t = (text||'').trim(); if(!t) return 0; // empty ⇒ 0.0
-      const words = t.split(/\s+/).length;
-      const hasMust = must.length===0 || must.some(m=> t.toLowerCase().includes(m.toLowerCase()));
-      if(words>=4 && hasMust) return 1.0; // ✅ Correto
-      if(words>=1) return 0.5;            // ⚠️ Parcial
-      return 0.0;                         // ❌ Incorreto
-    }
-
-    // ====== Results / Export ======
-    function computeAndShowResults(){
-      const payload = getPayload(true);
-      const score = computeScore(payload);
-      payload.final_score = Number(score.toFixed(1));
-      showResults(payload);
-    }
-    function showResults(payload){
-      hide(qs('#exam')); show(qs('#resultsCard'))
-      const list = `
-        <ul>
-          <li>Q2: <b>Juice</b> (b)</li>
-          <li>Q4: <b>Scissors</b> (a)</li>
-          <li>Q6: <b>Dog</b> (a)</li>
-          <li>Q7: <b>Shoes</b> (a)</li>
-          <li>Q8: <b>Sun</b> (a)</li>
-          <li>Q9: <b>Apple</b> (a)</li>
-        </ul>`;
-      qs('#resultsBox').innerHTML = `
-        <p class="ok"><b>Final Score:</b> ${payload.final_score}/10</p>
-        <h3>Answer Key (MCQ)</h3>${list}
-        <h3>Student Submission</h3>
-        <table>
-          <tr><th>Field</th><th>Value</th></tr>
-          ${Object.entries(payload).map(([k,v])=> k==='final_score'?'':`<tr><td>${k}</td><td>${escapeHtml(String(v||''))}</td></tr>`).join('')}
-        </table>`;
-    }
-
-    function sendToDanny(){
-      const payload = getPayload(true);
-      const score = computeScore(payload); payload.final_score = Number(score.toFixed(1));
-      fetch('https://sheetdb.io/api/v1/qfdaxi4ivyjam',{
-        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ data: payload })
-      }).then(r=>{
-        if(!r.ok) throw new Error('SheetDB returned '+r.status)
-        alert('Enviado! Respostas registradas na planilha.');
-        showResults(payload);
-      }).catch(err=>{
-        alert('Não foi possível enviar agora. Você pode baixar o CSV e importar manualmente.');
-        showResults(payload);
-      })
-    }
-
-    function getPayload(includeAnswers){
-      const get = id=> (qs('#'+id)?.value||'').trim();
-      const getMC = name=> (qs(`input[name="${name}"]:checked`)?.value||'');
-      const d = {
-        name:get('name'), email:get('email'), phone:get('phone'), date:get('date'),
-        q1:get('q1'), q2:getMC('q2'), q3:get('q3'), q4:getMC('q4'), q5:get('q5'), q6:getMC('q6'), q7:getMC('q7'), q8:getMC('q8'), q9:getMC('q9'), q10:get('q10')
-      };
-      return d;
-    }
-
-    function downloadCSV(){
-      const d = getPayload(true);
-      const headers = ['name','email','phone','date','q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','final_score'];
-      const score = computeScore(d); d.final_score = Number(score.toFixed(1));
-      const csv = headers.join(',') + "\n" + headers.map(h=>csvEscape(d[h]??'')).join(',');
-      const blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'results.csv'; a.click(); URL.revokeObjectURL(a.href);
-    }
-
-    // ====== Utils ======
-    function csvEscape(v){ const s=String(v).replaceAll('"','""'); return /[",\n]/.test(s)? '"'+s+'"' : s }
-    function debounce(fn, ms){let t; return (...args)=>{clearTimeout(t); t=setTimeout(()=>fn.apply(this,args),ms)}}
-    function escapeHtml(s){return s.replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]))}
-  </script>
+function downloadCSV(){saveCurrent();let csv="Name,Email,Phone,Date,"+questions.map(q=>q.id).join(",")+",Final Score\n";let name=document.getElementById("name").value,email=document.getElementById("email").value,phone=document.getElementById("phone").value,date=document.getElementById("date").value;let row=[name,email,phone,date,...questions.map(q=>`"${answers[q.id]||""}"`),Object.values(answers).length].join(",");csv+=row;let blob=new Blob([csv],{type:"text/csv"});let url=URL.createObjectURL(blob);let a=document.createElement("a");a.href=url;a.download="results.csv";a.click();}
+</script>
 </body>
 </html>
