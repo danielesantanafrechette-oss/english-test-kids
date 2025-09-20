@@ -2,189 +2,320 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>English Test for Kids</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>English Test for Kids • Danny Testes</title>
   <style>
-    body {
-      background-color: #fefae0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      padding: 20px;
+    :root{
+      --bg:#FFFCEB;--accent:#FF6F61;--teal:#00C292;--teal-dark:#009977;--ink:#333;--card:#fff;--muted:#666;--warning:#d93025
     }
-    .container {
-      max-width: 700px;
-      margin: auto;
-      background: #fff3c7;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h1, h2 {
-      text-align: center;
-      color: #d2691e;
-    }
-    label {
-      display: block;
-      margin: 10px 0 5px;
-      font-weight: bold;
-    }
-    input[type="text"], input[type="email"], input[type="tel"], textarea {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .question {
-      margin-bottom: 20px;
-    }
-    .options label {
-      font-weight: normal;
-      display: block;
-    }
-    button {
-      background-color: #ffa500;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 18px;
-      cursor: pointer;
-      margin-right: 10px;
-    }
-    button:hover {
-      background-color: #ff8c00;
-    }
-    .hidden {
-      display: none;
-    }
-    #timer {
-      text-align: right;
-      font-weight: bold;
-      color: red;
-    }
-    #results {
-      background-color: #e6ffe6;
-      padding: 15px;
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-    .correct { color: green; }
-    .partial { color: orange; }
-    .wrong { color: red; }
+    html,body{height:100%}
+    body{font-family:"Comic Sans MS", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background:var(--bg); color:var(--ink); margin:0}
+    .container{max-width:980px;margin:0 auto;padding:24px}
+    .card{background:var(--card);border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:24px}
+    h1{color:var(--accent);margin:.2rem 0 1rem;text-align:center}
+    h2{color:var(--accent);margin:0 0 .75rem}
+    .row{display:grid;gap:12px}
+    @media(min-width:640px){.row{grid-template-columns:repeat(2,1fr)}}
+    label{font-weight:600;display:block;margin:.25rem 0}
+    input,textarea,select{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:12px;border:1px solid #ddd;font-size:16px}
+    textarea{min-height:90px;resize:vertical}
+    .btn{appearance:none;border:0;border-radius:16px;padding:12px 18px;background:var(--teal);color:#fff;font-weight:700;cursor:pointer}
+    .btn.secondary{background:#e9eef3;color:#0b2b40}
+    .btn:hover{background:var(--teal-dark)}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap}
+    .hidden{display:none}
+    .meta{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    #timer{font-weight:800;color:var(--warning);font-size:18px}
+    .low-time{animation:pulse 1s infinite}
+    @keyframes pulse{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
+    .question{margin:14px 0}
+    .q-title{font-weight:700;margin-bottom:6px}
+    .nav{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+    .pill{display:inline-block;background:#f7f7f7;border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
+    .result{background:#f0f9ff;border:1px solid #cfe8ff;border-radius:12px;padding:16px}
+    table{border-collapse:collapse;width:100%}
+    th,td{border:1px solid #ddd;padding:8px}
+    th{background:#fafafa;text-align:left}
+    .alert{background:#fff3cd;border:1px solid #ffeeba;color:#856404;border-radius:10px;padding:10px;margin:10px 0}
+    .ok{background:#e8fff3;border:1px solid #bff5d1;color:#1b5e20}
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>English Test for Kids</h1>
-    <p><strong>Welcome! Please fill in your information below to begin.</strong></p>
-
-    <div id="introForm">
-      <label for="name">Name:</label>
-      <input type="text" id="name" required />
-
-      <label for="email">Email:</label>
-      <input type="email" id="email" required />
-
-      <label for="phone">Phone:</label>
-      <input type="tel" id="phone" required />
-
-      <label for="date">Date:</label>
-      <input type="text" id="date" placeholder="DD/MM/YYYY" required />
-
-      <button onclick="startTest()">Start Test</button>
+    <div class="card" id="intro">
+      <h1>English Test for Kids</h1>
+      <p style="text-align:center;margin-top:-6px">Friendly, playful and mobile‑ready • by <b>DANNY TESTES</b></p>
+      <h2>Student Info</h2>
+      <div class="row" aria-describedby="formHelp">
+        <div>
+          <label for="name">Name</label>
+          <input id="name" autocomplete="name" required />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" type="email" autocomplete="email" required />
+        </div>
+        <div>
+          <label for="phone">Phone</label>
+          <input id="phone" type="tel" autocomplete="tel" />
+        </div>
+        <div>
+          <label for="date">Date</label>
+          <input id="date" type="date" />
+        </div>
+      </div>
+      <p id="formHelp" class="pill" style="margin-top:8px">Click <b>Start Test</b> to begin. You have <b>30 minutes</b>.</p>
+      <div class="toolbar" style="justify-content:center;margin-top:10px">
+        <button class="btn" onclick="startTest()">Start Test</button>
+      </div>
     </div>
 
-    <form id="englishTest" class="hidden" onsubmit="submitTest(event)">
-      <div id="timer">Time Left: 30:00</div>
-      <!-- perguntas omitidas para brevidade -->
-      <button type="button" onclick="saveTest()">💾 Save</button>
-      <button type="submit">📩 Send to Dani</button>
-    </form>
+    <div class="card hidden" id="exam">
+      <div class="meta">
+        <div class="pill" id="progressPill">Question <span id="pageNow">1</span>/10</div>
+        <div id="timer">30:00</div>
+      </div>
 
-    <div id="results" class="hidden"></div>
+      <!-- Question pages -->
+      <form id="testForm" novalidate>
+        <!-- Q1 Discursive -->
+        <section class="question" data-q="1">
+          <div class="q-title">Q1 (writing). Write a sentence with the word <b>"rain"</b>.</div>
+          <textarea id="q1" aria-label="Q1 answer"></textarea>
+        </section>
+
+        <!-- Q2 MCQ -->
+        <section class="question hidden" data-q="2">
+          <div class="q-title">Q2. What do we drink in the morning?</div>
+          <label><input type="radio" name="q2" value="a"> a) Bread</label>
+          <label><input type="radio" name="q2" value="b"> b) Juice</label>
+          <label><input type="radio" name="q2" value="c"> c) Chair</label>
+          <label><input type="radio" name="q2" value="d"> d) Window</label>
+        </section>
+
+        <!-- Q3 Discursive -->
+        <section class="question hidden" data-q="3">
+          <div class="q-title">Q3 (writing). Write the name of a place you like to visit.</div>
+          <textarea id="q3" aria-label="Q3 answer"></textarea>
+        </section>
+
+        <!-- Q4 MCQ -->
+        <section class="question hidden" data-q="4">
+          <div class="q-title">Q4. What do we use to cut paper?</div>
+          <label><input type="radio" name="q4" value="a"> a) Scissors</label>
+          <label><input type="radio" name="q4" value="b"> b) Spoon</label>
+          <label><input type="radio" name="q4" value="c"> c) Plate</label>
+          <label><input type="radio" name="q4" value="d"> d) Straw</label>
+        </section>
+
+        <!-- Q5 Discursive -->
+        <section class="question hidden" data-q="5">
+          <div class="q-title">Q5 (writing). Write a word that rhymes with <b>"ball"</b>.</div>
+          <textarea id="q5" aria-label="Q5 answer"></textarea>
+        </section>
+
+        <!-- Q6 MCQ -->
+        <section class="question hidden" data-q="6">
+          <div class="q-title">Q6. Which one is a pet?</div>
+          <label><input type="radio" name="q6" value="a"> a) Dog</label>
+          <label><input type="radio" name="q6" value="b"> b) Car</label>
+          <label><input type="radio" name="q6" value="c"> c) Tree</label>
+          <label><input type="radio" name="q6" value="d"> d) Cloud</label>
+        </section>
+
+        <!-- Q7 MCQ -->
+        <section class="question hidden" data-q="7">
+          <div class="q-title">Q7. What do we wear on our feet?</div>
+          <label><input type="radio" name="q7" value="a"> a) Shoes</label>
+          <label><input type="radio" name="q7" value="b"> b) Hat</label>
+          <label><input type="radio" name="q7" value="c"> c) Gloves</label>
+          <label><input type="radio" name="q7" value="d"> d) Ring</label>
+        </section>
+
+        <!-- Q8 MCQ -->
+        <section class="question hidden" data-q="8">
+          <div class="q-title">Q8. Which one is hot and bright?</div>
+          <label><input type="radio" name="q8" value="a"> a) Sun</label>
+          <label><input type="radio" name="q8" value="b"> b) Ice</label>
+          <label><input type="radio" name="q8" value="c"> c) Pillow</label>
+          <label><input type="radio" name="q8" value="d"> d) Book</label>
+        </section>
+
+        <!-- Q9 MCQ -->
+        <section class="question hidden" data-q="9">
+          <div class="q-title">Q9. Which one is a fruit?</div>
+          <label><input type="radio" name="q9" value="a"> a) Apple</label>
+          <label><input type="radio" name="q9" value="b"> b) Onion</label>
+          <label><input type="radio" name="q9" value="c"> c) Bread</label>
+          <label><input type="radio" name="q9" value="d"> d) Cheese</label>
+        </section>
+
+        <!-- Q10 Discursive -->
+        <section class="question hidden" data-q="10">
+          <div class="q-title">Q10 (writing). Write a sentence using the word <b>"school"</b>.</div>
+          <textarea id="q10" aria-label="Q10 answer"></textarea>
+        </section>
+      </form>
+
+      <div class="nav">
+        <button class="btn secondary" onclick="prevPage()" id="prevBtn" aria-label="Previous question">◀ Previous</button>
+        <div class="toolbar">
+          <button class="btn secondary" onclick="saveAnswers()">💾 Save</button>
+          <button class="btn" onclick="sendToDanny()">📩 Send to Danny</button>
+          <button class="btn secondary" onclick="downloadCSV()">⬇ Download CSV</button>
+          <button class="btn" onclick="nextPage()" id="nextBtn" aria-label="Next question">Next ▶</button>
+        </div>
+      </div>
+
+      <div class="alert hidden" id="fiveMinWarn">⏰ Less than 5 minutes remaining. Please review your answers.</div>
+    </div>
+
+    <div class="card hidden" id="resultsCard">
+      <h2>Results</h2>
+      <div class="result" id="resultsBox"></div>
+      <details style="margin-top:10px">
+        <summary><b>Rubrica (Discursivas)</b></summary>
+        <table style="margin-top:8px">
+          <tr><th>Critério</th><th>Descrição</th><th>Pontuação</th></tr>
+          <tr><td>✅ Correto</td><td>Aluno compreendeu a pergunta e escreveu de forma correta (gramática e sentido)</td><td><b>1.0</b></td></tr>
+          <tr><td>⚠️ Parcial</td><td>Aluno compreendeu a pergunta, mas com erro de escrita ou gramática</td><td><b>0.5</b></td></tr>
+          <tr><td>❌ Incorreto</td><td>Resposta sem sentido, em branco ou não relacionada com a pergunta</td><td><b>0.0</b></td></tr>
+        </table>
+      </details>
+    </div>
   </div>
 
-<script>
-let timerInterval;
-let timeElapsed = 0;
-function startTest() {
-  document.getElementById('introForm').classList.add('hidden');
-  document.getElementById('englishTest').classList.remove('hidden');
-  startTimer();
-}
-function startTimer() {
-  const timerEl = document.getElementById('timer');
-  let time = 1800;
-  timerInterval = setInterval(() => {
-    timeElapsed++;
-    const minutes = String(Math.floor(time / 60)).padStart(2, '0');
-    const seconds = String(time % 60).padStart(2, '0');
-    timerEl.textContent = `Time Left: ${minutes}:${seconds}`;
-    if (--time < 0) clearInterval(timerInterval);
-  }, 1000);
-}
-function getRadioValue(name) {
-  const radios = document.getElementsByName(name);
-  for (const radio of radios) if (radio.checked) return radio.value;
-  return '';
-}
-function calculateScore(answers) {
-  const correct = { q2:'a', q4:'b', q6:'b', q7:'a', q8:'a', q9:'a' };
-  let score = 0;
-  for (let i = 1; i <= 10; i++) {
-    const key = 'q' + i;
-    const value = answers[key];
-    if ([1,3,5,10].includes(i)) {
-      if (!value || value.trim() === '') continue;
-      score += /\w+/.test(value) ? (/[.,!?]/.test(value) ? 1 : 0.5) : 0;
-    } else {
-      if (value === correct[key]) score++;
-    }
-  }
-  return score;
-}
-function saveTest() {
-  alert('Test saved locally.');
-}
-function submitTest(e) {
-  e.preventDefault();
-  clearInterval(timerInterval);
-  const data = {
-    name: document.getElementById('name').value,
-    email: document.getElementById('email').value,
-    phone: document.getElementById('phone').value,
-    date: document.getElementById('date').value,
-    q1: document.getElementById('q1').value,
-    q2: getRadioValue('q2'),
-    q3: document.getElementById('q3').value,
-    q4: getRadioValue('q4'),
-    q5: document.getElementById('q5').value,
-    q6: getRadioValue('q6'),
-    q7: getRadioValue('q7'),
-    q8: getRadioValue('q8'),
-    q9: getRadioValue('q9'),
-    q10: document.getElementById('q10').value,
-    time: timeElapsed,
-  };
-  data.score = calculateScore(data);
+  <script>
+    // ====== State ======
+    const ANSWER_KEY = { q2:"b", q4:"a", q6:"a", q7:"a", q8:"a", q9:"a" };
+    let page = 1; // 1..10
+    let timerInterval; let timeLeft = 30*60; // 30 minutes
 
-  fetch("https://sheetdb.io/api/v1/qfdaxi4ivyjam", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ data })
-  })
-  .then(response => response.json())
-  .then(json => {
-    showResults(data);
-  })
-  .catch(error => alert("Error sending to Dani: " + error));
-}
-function showResults(data) {
-  const div = document.getElementById('results');
-  div.innerHTML = `<h2>Results</h2><p><strong>Score:</strong> ${data.score}/10</p>`;
-  div.classList.remove('hidden');
-}
-</script>
+    // ====== UI Helpers ======
+    function show(el){el.classList.remove('hidden')} function hide(el){el.classList.add('hidden')}
+    function qs(s){return document.querySelector(s)}
+    function qsa(s){return Array.from(document.querySelectorAll(s))}
+
+    // ====== Start / Timer ======
+    function startTest(){
+      hide(qs('#intro')); show(qs('#exam')); showPage(1);
+      const saved = JSON.parse(localStorage.getItem('danny_test_kids')||'null');
+      if(saved){fillForm(saved)} else {qs('#date').value ||= new Date().toISOString().slice(0,10)}
+      startTimer();
+    }
+    function startTimer(){
+      updateTimerText();
+      timerInterval = setInterval(()=>{
+        timeLeft--; if(timeLeft<=300){qs('#fiveMinWarn').classList.remove('hidden'); qs('#timer').classList.add('low-time')}
+        if(timeLeft<=0){clearInterval(timerInterval); computeAndShowResults(); return}
+        updateTimerText();
+      },1000)
+    }
+    function updateTimerText(){ const m=Math.floor(timeLeft/60), s=String(timeLeft%60).padStart(2,'0'); qs('#timer').textContent=`${m}:${s}` }
+
+    // ====== Paging ======
+    function showPage(n){
+      page = Math.max(1, Math.min(10, n));
+      qsa('[data-q]').forEach(sec=>{sec.classList.toggle('hidden', Number(sec.dataset.q)!==page)});
+      qs('#pageNow').textContent = String(page);
+      qs('#prevBtn').disabled = page===1; qs('#nextBtn').textContent = page===10? 'Finish ▶' : 'Next ▶';
+    }
+    function nextPage(){ if(page<10){ showPage(page+1) } else { computeAndShowResults() } }
+    function prevPage(){ if(page>1){ showPage(page-1) } }
+
+    // ====== Persistence ======
+    qsa('input, textarea').forEach(el=> el.addEventListener('change', debounce(saveAnswers, 300)) )
+    function saveAnswers(){ localStorage.setItem('danny_test_kids', JSON.stringify(getPayload(false))); alert('Respostas salvas localmente.') }
+    function fillForm(d){ ['name','email','phone','date','q1','q3','q5','q10'].forEach(k=>{ if(d[k]) qs('#'+k).value=d[k] })
+      ;['q2','q4','q6','q7','q8','q9'].forEach(k=>{ if(d[k]) { const r = qs(`input[name="${k}"][value="${d[k]}"]`); if(r) r.checked=true } }) }
+
+    // ====== Scoring ======
+    function computeScore(payload){
+      let score = 0;
+      // objective
+      Object.keys(ANSWER_KEY).forEach(k=>{ if(payload[k] === ANSWER_KEY[k]) score += 1 })
+      // discursive heuristic (kids level): length + simple keyword relevance per prompt
+      score += rubricScore(payload.q1, ['rain']);
+      score += rubricScore(payload.q3, []);
+      score += rubricScore(payload.q5, ['ball']);
+      score += rubricScore(payload.q10, ['school']);
+      return score;
+    }
+    function rubricScore(text, must){
+      const t = (text||'').trim(); if(!t) return 0; // empty ⇒ 0.0
+      const words = t.split(/\s+/).length;
+      const hasMust = must.length===0 || must.some(m=> t.toLowerCase().includes(m.toLowerCase()));
+      if(words>=4 && hasMust) return 1.0; // ✅ Correto
+      if(words>=1) return 0.5;            // ⚠️ Parcial
+      return 0.0;                         // ❌ Incorreto
+    }
+
+    // ====== Results / Export ======
+    function computeAndShowResults(){
+      const payload = getPayload(true);
+      const score = computeScore(payload);
+      payload.final_score = Number(score.toFixed(1));
+      showResults(payload);
+    }
+    function showResults(payload){
+      hide(qs('#exam')); show(qs('#resultsCard'))
+      const list = `
+        <ul>
+          <li>Q2: <b>Juice</b> (b)</li>
+          <li>Q4: <b>Scissors</b> (a)</li>
+          <li>Q6: <b>Dog</b> (a)</li>
+          <li>Q7: <b>Shoes</b> (a)</li>
+          <li>Q8: <b>Sun</b> (a)</li>
+          <li>Q9: <b>Apple</b> (a)</li>
+        </ul>`;
+      qs('#resultsBox').innerHTML = `
+        <p class="ok"><b>Final Score:</b> ${payload.final_score}/10</p>
+        <h3>Answer Key (MCQ)</h3>${list}
+        <h3>Student Submission</h3>
+        <table>
+          <tr><th>Field</th><th>Value</th></tr>
+          ${Object.entries(payload).map(([k,v])=> k==='final_score'?'':`<tr><td>${k}</td><td>${escapeHtml(String(v||''))}</td></tr>`).join('')}
+        </table>`;
+    }
+
+    function sendToDanny(){
+      const payload = getPayload(true);
+      const score = computeScore(payload); payload.final_score = Number(score.toFixed(1));
+      fetch('https://sheetdb.io/api/v1/qfdaxi4ivyjam',{
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ data: payload })
+      }).then(r=>{
+        if(!r.ok) throw new Error('SheetDB returned '+r.status)
+        alert('Enviado! Respostas registradas na planilha.');
+        showResults(payload);
+      }).catch(err=>{
+        alert('Não foi possível enviar agora. Você pode baixar o CSV e importar manualmente.');
+        showResults(payload);
+      })
+    }
+
+    function getPayload(includeAnswers){
+      const get = id=> (qs('#'+id)?.value||'').trim();
+      const getMC = name=> (qs(`input[name="${name}"]:checked`)?.value||'');
+      const d = {
+        name:get('name'), email:get('email'), phone:get('phone'), date:get('date'),
+        q1:get('q1'), q2:getMC('q2'), q3:get('q3'), q4:getMC('q4'), q5:get('q5'), q6:getMC('q6'), q7:getMC('q7'), q8:getMC('q8'), q9:getMC('q9'), q10:get('q10')
+      };
+      return d;
+    }
+
+    function downloadCSV(){
+      const d = getPayload(true);
+      const headers = ['name','email','phone','date','q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','final_score'];
+      const score = computeScore(d); d.final_score = Number(score.toFixed(1));
+      const csv = headers.join(',') + "\n" + headers.map(h=>csvEscape(d[h]??'')).join(',');
+      const blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'results.csv'; a.click(); URL.revokeObjectURL(a.href);
+    }
+
+    // ====== Utils ======
+    function csvEscape(v){ const s=String(v).replaceAll('"','""'); return /[",\n]/.test(s)? '"'+s+'"' : s }
+    function debounce(fn, ms){let t; return (...args)=>{clearTimeout(t); t=setTimeout(()=>fn.apply(this,args),ms)}}
+    function escapeHtml(s){return s.replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]))}
+  </script>
 </body>
 </html>
